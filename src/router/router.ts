@@ -3,11 +3,14 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
-    component: () => import('../views/HelloWorld.vue'),
-  },
-  {
-    path: "/map",
-    component: () => import('../views/Map.vue'),
+    redirect: "/index/map",
+    component: () => import('../views/common/index.vue'),
+    children: [
+      {
+        path: '/index/map',
+        component: () => import('../views/Map.vue'),
+      }
+    ]
   },
 ];
 
