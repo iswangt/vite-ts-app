@@ -1,0 +1,23 @@
+{
+  "id": "2841580",
+  "name": "vite-ts-app",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "地图项目",
+  "glyphs": [
+    {
+      "icon_id": "629333",
+      "name": "设置",
+      "font_class": "shezhi",
+      "unicode": "e64b",
+      "unicode_decimal": 58955
+    },
+    {
+      "icon_id": "11372655",
+      "name": "地图",
+      "font_class": "ditu",
+      "unicode": "e8ad",
+      "unicode_decimal": 59565
+    }
+  ]
+}

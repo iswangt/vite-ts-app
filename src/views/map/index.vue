@@ -31,7 +31,7 @@ onMounted (() => {
 </template>
 
 <style lang="scss" scoped>
-@import '../styles/index.scss';
+@import '../../styles/index.scss';
 #map{height:100%;}
 /*隐藏ol的一些自带元素*/
 .ol-attribution,.ol-zoom { display: none;}
