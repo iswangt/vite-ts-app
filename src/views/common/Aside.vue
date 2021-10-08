@@ -9,7 +9,7 @@ const router = useRouter() // 路由跳转
 
 // 变量定义
 const defalutAct:String = ('/')
-let asideArr:any[] = ref([])
+let asideArr:any = ref([])
 
 onBeforeMount (() => {
   console.log(router.options.routes)

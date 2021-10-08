@@ -14,6 +14,7 @@ import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer'; // 图层
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onActivated, onDeactivated, onErrorCaptured } from 'vue'
 
 let map:any = null
+let featureBallLayer:any, featureGunLayer:any
 onMounted (() => {
   initMap() // 初始化地图
 })
@@ -23,6 +24,7 @@ function initMap () {
     target: "map",
     layers: [
       new TileLayer({
+        className: 'mapLayer',
         source: new OSM()
       })
     ],
@@ -49,8 +51,10 @@ function initCamera () {
       lat: `34.2${Math.ceil(Math.random() * 1000)}`
     })
   }
-  let iconFeatureArr = deviceList.map(e => {
-    let iconFeature = new Feature({
+  let iconBallFeature:any = []
+  let iconGunFeature:any = []
+  deviceList.forEach(e => {
+    let iconFeature = new Feature({ // 初始化矢量图数据
       geometry: new Point([e.lng, e.lat]),
       data: e,
       population: 4000,
@@ -62,26 +66,97 @@ function initCamera () {
       }),
     });
     iconFeature.setStyle(iconStyle);
-    return iconFeature;
+    if (e.typeCode == 'ball') {
+      iconBallFeature.push(iconFeature)
+    } else {
+      iconGunFeature.push(iconFeature)
+    }
   })
   // 创建图标样式
-  let featureSource = new VectorSource({
-    features: iconFeatureArr
+  // 球型
+  let featureBallSource = new VectorSource({ // 添加数据源
+    features: iconBallFeature
   })
-  let featureLayer = new VectorLayer({
-    source: featureSource
+  featureBallLayer = new VectorLayer({ // 数据源添加图层
+    className: 'ballLayer',
+    source: featureBallSource
   })
-  map.addLayer(featureLayer)
+  featureBallLayer.setZIndex(1) // 设置图层层级
+  map.addLayer(featureBallLayer) // 图层添加地图
+  // 枪型
+  let featureGunSource = new VectorSource({
+    features: iconGunFeature
+  })
+  featureGunLayer = new VectorLayer({
+    className: 'gunLayer',
+    source: featureGunSource
+  })
+  featureGunLayer.setZIndex(2) // 设置图层层级
+  map.addLayer(featureGunLayer)
+}
+// 摄像头选择器
+let cameraType:any = ref({
+  camera: '',
+  options: [
+    {
+      value: 'ballLayer',
+      label: '卡口球式摄像头',
+    },
+    {
+      value: 'gunLayer',
+      label: '卡口枪式摄像头',
+    }
+  ]
+})
+function cameraTypeChange (value:any) {
+  // console.log(map.getLayers().getArray()) // 获取所有图层
+  // console.log(value)
+  map.getLayers().getArray().forEach(e => {
+    if (value.length > 0) {
+      if (e.className_ !== 'mapLayer') {
+        e.setVisible(false)
+      }
+      value.forEach(eee => {
+        if (e.className_ === eee) {
+          e.setVisible(true)
+        }
+      })
+    } else {
+      e.setVisible(true)
+    }
+  })
 }
 </script>
 
 <template>
-  <div id="map"></div>
+  <div class="map">
+    <div id="map"></div>
+    <div class="cameraType">
+      <el-select v-model="cameraType.camera" multiple placeholder="请选择摄像头类型" @change="cameraTypeChange">
+        <el-option
+          v-for="item in cameraType.options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        >
+        </el-option>
+      </el-select>
+    </div>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 @import '../../styles/index.scss';
-#map{height:100%;}
-/*隐藏ol的一些自带元素*/
-.ol-attribution,.ol-zoom { display: none;}
+.map {
+  position: relative;
+  height: 100%;
+  #map{height:100%;}
+  /*隐藏ol的一些自带元素*/
+  .ol-attribution,.ol-zoom { display: none;}
+  .cameraType {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+  }
+}
 </style>
