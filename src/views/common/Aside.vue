@@ -11,11 +11,9 @@ const router = useRouter() // 路由跳转
 const defalutAct:String = ('/')
 let asideArr:any[] = ref([])
 
-
 onBeforeMount (() => {
   console.log(router.options.routes)
   asideArr.value = router.options.routes
-  console.log(asideArr)
 })
 
 onMounted (() => {
