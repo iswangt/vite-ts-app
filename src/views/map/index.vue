@@ -3,12 +3,11 @@ import { ref } from 'vue'
 
 import 'ol/ol.css'
 import { Map, View } from "ol";
-import OSM from "ol/source/OSM";
 
 import Point from 'ol/geom/Point';
 import Feature from 'ol/Feature'; // 矢量图标
 import {Icon, Style} from 'ol/style'; // 样式
-import {Stamen, Vector as VectorSource} from 'ol/source'; // 数据源
+import {OSM, Vector as VectorSource} from 'ol/source'; // 数据源
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer'; // 图层
 
 import { onBeforeMount, onMounted, onBeforeUpdate, onUpdated, onBeforeUnmount, onUnmounted, onActivated, onDeactivated, onErrorCaptured } from 'vue'
@@ -132,7 +131,7 @@ function cameraTypeChange (value:any) {
   <div class="map">
     <div id="map"></div>
     <div class="cameraType">
-      <el-select v-model="cameraType.camera" multiple placeholder="请选择摄像头类型" @change="cameraTypeChange">
+      <el-select v-model="cameraType.camera" multiple collapse-tags placeholder="请选择摄像头类型" @change="cameraTypeChange">
         <el-option
           v-for="item in cameraType.options"
           :key="item.value"
@@ -145,7 +144,7 @@ function cameraTypeChange (value:any) {
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '../../styles/index.scss';
 .map {
   position: relative;
