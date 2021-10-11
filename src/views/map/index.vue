@@ -16,6 +16,10 @@ let map:any = null
 let featureBallLayer:any, featureGunLayer:any
 onMounted (() => {
   initMap() // 初始化地图
+  // 缩放级别监听
+  map.getView().on('change:resolution', function () {
+    console.log('缩放级别：', map.getView().getZoom())
+  })
 })
 function initMap () {
   // 初始化地图
@@ -30,6 +34,8 @@ function initMap () {
     view: new View({
       projection: "EPSG:4326",    //使用这个坐标系
       center: [108.948024,34.263161],  //西安
+      minZoom: 1,
+      maxZoom: 18,
       zoom: 13
     })
   })
@@ -151,7 +157,7 @@ function cameraTypeChange (value:any) {
   height: 100%;
   #map{height:100%;}
   /*隐藏ol的一些自带元素*/
-  .ol-attribution,.ol-zoom { display: none;}
+  // .ol-attribution,.ol-zoom { display: none;}
   .cameraType {
     position: absolute;
     top: 10px;
